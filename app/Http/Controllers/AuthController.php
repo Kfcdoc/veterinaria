@@ -21,6 +21,7 @@ class AuthController extends Controller
         if (Auth::attempt($credenciales)) {
             return to_route('home');
         } else {
+            session()->flash('error', true);
             return to_route('login');
         }
     }
