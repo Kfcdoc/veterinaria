@@ -19,6 +19,9 @@ class AuthController extends Controller
         ];
 
         if (Auth::attempt($credenciales)) {
+            if (Auth::user()->rol === 'administrador') {
+                return to_route('admin.home');
+            }
             return to_route('home');
         } else {
             session()->flash('error', true);
@@ -34,5 +37,9 @@ class AuthController extends Controller
 
     public function home() {
         return view('modules/dashboard/home');
+    }
+
+    public function adminHome() {
+        return view('modules/dashboard/admin_home');
     }
 }
