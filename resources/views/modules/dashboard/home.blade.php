@@ -14,6 +14,14 @@
         </span>
     </div>
 
+    {{-- Mensaje de bienvenida --}}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <strong>¡Bienvenido, {{ Auth::user()->name }}!</strong> Que tengas un excelente turno.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
     {{-- Tarjetas de resumen --}}
     <div class="row">
 
