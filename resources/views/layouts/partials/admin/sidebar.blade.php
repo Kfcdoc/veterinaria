@@ -50,18 +50,18 @@
     </li>
 
     {{-- Nav Item - Usuarios --}}
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsuarios"
-            aria-expanded="true" aria-controls="collapseUsuarios">
+    <li class="nav-item {{ request()->routeIs('admin.usuarios.*') ? 'active' : '' }}">
+        <a class="nav-link {{ request()->routeIs('admin.usuarios.*') ? '' : 'collapsed' }}" href="#" data-toggle="collapse" data-target="#collapseUsuarios"
+            aria-expanded="{{ request()->routeIs('admin.usuarios.*') ? 'true' : 'false' }}" aria-controls="collapseUsuarios">
             <i class="fas fa-fw fa-users-cog"></i>
             <span>Usuarios</span>
         </a>
-        <div id="collapseUsuarios" class="collapse" aria-labelledby="headingUsuarios"
+        <div id="collapseUsuarios" class="collapse {{ request()->routeIs('admin.usuarios.*') ? 'show' : '' }}" aria-labelledby="headingUsuarios"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Gestión de acceso:</h6>
-                <a class="collapse-item" href="#">Ver usuarios</a>
-                <a class="collapse-item" href="#">Nuevo usuario</a>
+                <a class="collapse-item {{ request()->routeIs('admin.usuarios.index') ? 'active' : '' }}" href="{{ route('admin.usuarios.index') }}">Ver usuarios</a>
+                <a class="collapse-item {{ request()->routeIs('admin.usuarios.create') ? 'active' : '' }}" href="{{ route('admin.usuarios.create') }}">Nuevo usuario</a>
             </div>
         </div>
     </li>
