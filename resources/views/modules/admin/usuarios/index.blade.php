@@ -23,6 +23,19 @@
         </div>
     @endif
 
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
     {{-- Content --}}
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -37,6 +50,7 @@
                             <th>Nombre Completo</th>
                             <th>Correo</th>
                             <th>Rol</th>
+                            <th>Cédula / Especialidad</th>
                             <th>Fecha de Registro</th>
                             <th>Acciones</th>
                         </tr>
@@ -54,10 +68,18 @@
                                         <span class="badge badge-success px-2 py-1">Veterinario</span>
                                     @endif
                                 </td>
+                                <td>
+                                    @if($usuario->rol == 'veterinario' && $usuario->veterinario)
+                                        <small><strong>Cédula:</strong> {{ $usuario->veterinario->cedula_profesional }}<br>
+                                        <strong>Esp:</strong> {{ $usuario->veterinario->especialidad ?? 'General' }}</small>
+                                    @else
+                                        <span class="text-muted"><small>N/A</small></span>
+                                    @endif
+                                </td>
                                 <td>{{ $usuario->created_at->format('d/m/Y') }}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning" title="Editar"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash"></i></button>
+                                    <a href="{{ route('admin.usuarios.edit', $usuario) }}" class="btn btn-sm btn-warning" title="Editar"><i class="fas fa-edit"></i></a>
+                                    <a href="{{ route('admin.usuarios.show', $usuario) }}" class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash"></i></a>
                                 </td>
                             </tr>
                         @empty
@@ -67,6 +89,10 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+            
+            <div class="d-flex justify-content-end mt-3">
+                {{ $usuarios->links() }}
             </div>
         </div>
     </div>

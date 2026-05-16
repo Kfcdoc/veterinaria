@@ -18,6 +18,10 @@ Route::middleware("auth")->group(function () {
     Route::get('/admin/usuarios', [UserController::class, 'index'])->name('admin.usuarios.index');
     Route::get('/admin/usuarios/crear', [UserController::class, 'create'])->name('admin.usuarios.create');
     Route::post('/admin/usuarios', [UserController::class, 'store'])->name('admin.usuarios.store');
+    Route::get('/admin/usuarios/{user}/editar', [UserController::class, 'edit'])->name('admin.usuarios.edit');
+    Route::put('/admin/usuarios/{user}', [UserController::class, 'update'])->name('admin.usuarios.update');
+    Route::get('/admin/usuarios/{user}/eliminar', [UserController::class, 'show'])->name('admin.usuarios.show');
+    Route::delete('/admin/usuarios/{user}', [UserController::class, 'destroy'])->name('admin.usuarios.destroy');
     
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
