@@ -16,12 +16,17 @@
                     <h5 class="text-gray-800 mb-4">Búsqueda de Pacientes</h5>
                     
                     {{-- Buscador --}}
-                    <div class="input-group input-group-lg mb-5 shadow-sm rounded">
-                        <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar por nombre, dueño, teléfono..." aria-label="Buscar paciente">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary px-4" type="button">
-                                <i class="fas fa-search"></i>
-                            </button>
+                    <div class="position-relative">
+                        <div class="input-group input-group-lg mb-4 shadow-sm rounded">
+                            <input type="text" id="buscador-mascotas" class="form-control bg-light border-0 small" placeholder="Buscar por nombre, dueño, folio..." aria-label="Buscar paciente">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary px-4" type="button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        {{-- Contenedor de Resultados Flotante --}}
+                        <div id="resultados-busqueda" class="list-group position-absolute w-100 shadow" style="top: 100%; left: 0; z-index: 1000; display: none; text-align: left; max-height: 300px; overflow-y: auto;">
                         </div>
                     </div>
 
@@ -39,3 +44,55 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const inputBuscador = document.getElementById('buscador-mascotas');
+    const contenedorResultados = document.getElementById('resultados-busqueda');
+
+    inputBuscador.addEventListener('input', function() {
+        let query = this.value.trim();
+        if (query.length < 2) {
+            contenedorResultados.style.display = 'none';
+            return;
+        }
+
+        fetch(`/expedientes/buscar?q=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                contenedorResultados.innerHTML = '';
+                if (data.length > 0) {
+                    data.forEach(mascota => {
+                        let duenoNombre = mascota.dueno ? mascota.dueno.nombre_completo : 'Sin dueño';
+                        let html = `
+                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1 text-primary"><i class="fas fa-paw mr-2"></i>${mascota.nombre} (Folio: ${mascota.id})</h5>
+                                    <small class="text-muted">${mascota.especie}</small>
+                                </div>
+                                <p class="mb-1 text-gray-800">Dueño: ${duenoNombre}</p>
+                            </a>
+                        `;
+                        contenedorResultados.innerHTML += html;
+                    });
+                    contenedorResultados.style.display = 'block';
+                } else {
+                    contenedorResultados.innerHTML = `<div class="list-group-item text-muted">No se encontraron resultados para "${query}"</div>`;
+                    contenedorResultados.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+
+    // Ocultar al hacer clic fuera
+    document.addEventListener('click', function(e) {
+        if (!inputBuscador.contains(e.target) && !contenedorResultados.contains(e.target)) {
+            contenedorResultados.style.display = 'none';
+        }
+    });
+});
+</script>
+@endpush

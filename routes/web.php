@@ -14,6 +14,16 @@ Route::middleware("auth")->group(function () {
     Route::get('/expedientes', function () {
         return view('modules.expedientes.index');
     })->name('expedientes.index');
+
+    Route::get('/expedientes/buscar', function (Illuminate\Http\Request $request) {
+        $query = $request->input('q');
+        if (!$query) {
+            return response()->json([]);
+        }
+        $resultados = App\Models\Mascota::search($query)->get();
+        $resultados->load('dueno');
+        return response()->json($resultados);
+    })->name('expedientes.buscar');
     
     // Rutas de Administrador
     Route::get('/admin/home', [AuthController::class, 'adminHome'])->name('admin.home');
