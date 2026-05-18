@@ -18,4 +18,9 @@ class Veterinario extends Model
     {
         return $this->belongsTo(User::class, 'usuario_id');
     }
+
+    public function consultas()
+    {
+        return $this->hasMany(Consulta::class);
+    }
 }
