@@ -11,6 +11,9 @@ Route::middleware("guest")->group(function () {
 
 Route::middleware("auth")->group(function () {
     Route::get('/home', [AuthController::class, 'home'])->name('home');
+    Route::get('/expedientes', function () {
+        return view('modules.expedientes.index');
+    })->name('expedientes.index');
     
     // Rutas de Administrador
     Route::get('/admin/home', [AuthController::class, 'adminHome'])->name('admin.home');

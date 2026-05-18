@@ -10,18 +10,21 @@
         <i class="fa fa-bars"></i>
     </button>
 
-    {{-- Topbar Search --}}
-    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-        <div class="input-group">
-            <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar..."
-                aria-label="Search" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-                <button class="btn btn-primary" type="button">
-                    <i class="fas fa-search fa-sm"></i>
-                </button>
-            </div>
-        </div>
-    </form>
+    {{-- Topbar Search (Removido) --}}
+    
+    {{-- Pestañas de Navegación --}}
+    <ul class="navbar-nav mr-auto ml-3">
+        <li class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('home') }}" style="color: {{ request()->routeIs('home') ? '#4e73df' : '#858796' }}; font-weight: {{ request()->routeIs('home') ? 'bold' : 'normal' }}; border-bottom: {{ request()->routeIs('home') ? '2px solid #4e73df' : 'none' }};">
+                Inicio
+            </a>
+        </li>
+        <li class="nav-item {{ request()->routeIs('expedientes.index') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('expedientes.index') }}" style="color: {{ request()->routeIs('expedientes.index') ? '#4e73df' : '#858796' }}; font-weight: {{ request()->routeIs('expedientes.index') ? 'bold' : 'normal' }}; border-bottom: {{ request()->routeIs('expedientes.index') ? '2px solid #4e73df' : 'none' }};">
+                Expedientes
+            </a>
+        </li>
+    </ul>
 
     {{-- Topbar Navbar --}}
     <ul class="navbar-nav ml-auto">

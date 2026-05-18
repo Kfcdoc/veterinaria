@@ -26,7 +26,9 @@
     <div id="wrapper">
 
         {{-- ===== SIDEBAR ===== --}}
-        @include('layouts.partials.sidebar')
+        @unless(View::hasSection('hide_sidebar'))
+            @include('layouts.partials.sidebar')
+        @endunless
         {{-- ===== FIN SIDEBAR ===== --}}
 
         <!-- Content Wrapper -->
