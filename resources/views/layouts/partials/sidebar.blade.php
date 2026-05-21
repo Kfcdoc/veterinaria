@@ -30,8 +30,8 @@
     </li>
 
     {{-- Nav Item - Tratamiento --}}
-    <li class="nav-item">
-        <a class="nav-link" href="#tratamiento">
+    <li class="nav-item {{ request()->routeIs('expedientes.consultas.tratamiento') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('expedientes.consultas.tratamiento', [$mascota->id ?? 0, $consulta->id ?? 0]) }}">
             <i class="fas fa-fw fa-pills"></i>
             <span>Tratamiento</span>
         </a>
@@ -46,32 +46,32 @@
     </div>
 
     {{-- Nav Item - Alergias --}}
-    <li class="nav-item">
-        <a class="nav-link" href="#alergias">
+    <li class="nav-item {{ request()->routeIs('expedientes.consultas.alergias') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('expedientes.consultas.alergias', [$mascota->id ?? 0, $consulta->id ?? 0]) }}">
             <i class="fas fa-fw fa-allergies"></i>
             <span>Alergias</span>
         </a>
     </li>
 
     {{-- Nav Item - Lesiones --}}
-    <li class="nav-item">
-        <a class="nav-link" href="#lesiones">
+    <li class="nav-item {{ request()->routeIs('expedientes.consultas.lesiones') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('expedientes.consultas.lesiones', [$mascota->id ?? 0, $consulta->id ?? 0]) }}">
             <i class="fas fa-fw fa-bone"></i>
             <span>Lesiones</span>
         </a>
     </li>
 
     {{-- Nav Item - Patológicos --}}
-    <li class="nav-item">
-        <a class="nav-link" href="#patologicos">
+    <li class="nav-item {{ request()->routeIs('expedientes.consultas.patologicos') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('expedientes.consultas.patologicos', [$mascota->id ?? 0, $consulta->id ?? 0]) }}">
             <i class="fas fa-fw fa-file-medical-alt"></i>
             <span>Patológicos</span>
         </a>
     </li>
 
     {{-- Nav Item - Alimentación --}}
-    <li class="nav-item">
-        <a class="nav-link" href="#alimentacion">
+    <li class="nav-item {{ request()->routeIs('expedientes.consultas.alimentacion') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('expedientes.consultas.alimentacion', [$mascota->id ?? 0, $consulta->id ?? 0]) }}">
             <i class="fas fa-fw fa-utensils"></i>
             <span>Alimentación</span>
         </a>

@@ -25,7 +25,11 @@ class Mascota extends Model
         'fecha_nacimiento',
         'tipo_sangre',
         'comportamiento',
-        'es_adoptado'
+        'es_adoptado',
+        'alergias',
+        'lesiones',
+        'patologicos',
+        'alimentacion'
     ];
 
     protected $casts = [
