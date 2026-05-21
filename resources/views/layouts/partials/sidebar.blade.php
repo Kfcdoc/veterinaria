@@ -16,11 +16,24 @@
     {{-- Divider --}}
     <hr class="sidebar-divider my-0">
 
-    {{-- Nav Item - Dashboard --}}
-    <li class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('home') }}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span>
+    {{-- Heading --}}
+    <div class="sidebar-heading">
+        Consulta Actual
+    </div>
+
+    {{-- Nav Item - Diagnóstico --}}
+    <li class="nav-item">
+        <a class="nav-link" href="#diagnostico">
+            <i class="fas fa-fw fa-stethoscope"></i>
+            <span>Diagnóstico</span>
+        </a>
+    </li>
+
+    {{-- Nav Item - Tratamiento --}}
+    <li class="nav-item">
+        <a class="nav-link" href="#tratamiento">
+            <i class="fas fa-fw fa-pills"></i>
+            <span>Tratamiento</span>
         </a>
     </li>
 
@@ -29,41 +42,39 @@
 
     {{-- Heading --}}
     <div class="sidebar-heading">
-        Sistema
+        Antecedentes del Paciente
     </div>
 
-    {{-- Nav Item - Pacientes --}}
+    {{-- Nav Item - Alergias --}}
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePacientes"
-            aria-expanded="true" aria-controls="collapsePacientes">
-            <i class="fas fa-fw fa-dog"></i>
-            <span>Pacientes</span>
+        <a class="nav-link" href="#alergias">
+            <i class="fas fa-fw fa-allergies"></i>
+            <span>Alergias</span>
         </a>
-        <div id="collapsePacientes" class="collapse" aria-labelledby="headingPacientes"
-            data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Gestión:</h6>
-                <a class="collapse-item" href="#">Ver pacientes</a>
-                <a class="collapse-item" href="#">Nuevo paciente</a>
-            </div>
-        </div>
     </li>
 
-    {{-- Nav Item - Citas --}}
+    {{-- Nav Item - Lesiones --}}
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCitas"
-            aria-expanded="true" aria-controls="collapseCitas">
-            <i class="fas fa-fw fa-calendar-check"></i>
-            <span>Citas</span>
+        <a class="nav-link" href="#lesiones">
+            <i class="fas fa-fw fa-bone"></i>
+            <span>Lesiones</span>
         </a>
-        <div id="collapseCitas" class="collapse" aria-labelledby="headingCitas"
-            data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Agenda:</h6>
-                <a class="collapse-item" href="#">Ver citas</a>
-                <a class="collapse-item" href="#">Nueva cita</a>
-            </div>
-        </div>
+    </li>
+
+    {{-- Nav Item - Patológicos --}}
+    <li class="nav-item">
+        <a class="nav-link" href="#patologicos">
+            <i class="fas fa-fw fa-file-medical-alt"></i>
+            <span>Patológicos</span>
+        </a>
+    </li>
+
+    {{-- Nav Item - Alimentación --}}
+    <li class="nav-item">
+        <a class="nav-link" href="#alimentacion">
+            <i class="fas fa-fw fa-utensils"></i>
+            <span>Alimentación</span>
+        </a>
     </li>
 
     {{-- Divider --}}

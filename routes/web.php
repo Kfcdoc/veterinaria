@@ -26,9 +26,18 @@ Route::middleware("auth")->group(function () {
     })->name('expedientes.buscar');
 
     Route::get('/expedientes/mascotas/{mascota}/consultas', function (\App\Models\Mascota $mascota) {
-        $mascota->load('dueno');
+        $mascota->load(['dueno', 'consultas.veterinario']);
         return view('modules.expedientes.consultas', compact('mascota'));
     })->name('expedientes.consultas');
+
+    Route::get('/expedientes/mascotas/{mascota}/consultas/{consulta}', function (\App\Models\Mascota $mascota, \App\Models\Consulta $consulta) {
+        $mascota->load('dueno');
+        $consulta->load('veterinario');
+        if ($consulta->mascota_id !== $mascota->id) {
+            abort(404);
+        }
+        return view('modules.expedientes.consulta_detalle', compact('mascota', 'consulta'));
+    })->name('expedientes.consultas.detalle');
     
     // Rutas de Administrador
     Route::get('/admin/home', [AuthController::class, 'adminHome'])->name('admin.home');
