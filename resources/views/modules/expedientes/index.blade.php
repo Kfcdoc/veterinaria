@@ -19,11 +19,6 @@
                     <div class="position-relative">
                         <div class="input-group input-group-lg mb-4 shadow-sm rounded">
                             <input type="text" id="buscador-mascotas" class="form-control bg-light border-0 small" placeholder="Buscar por nombre, dueño, folio..." aria-label="Buscar paciente">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary px-4" type="button">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
                         </div>
                         {{-- Contenedor de Resultados Flotante --}}
                         <div id="resultados-busqueda" class="list-group position-absolute w-100 shadow" style="top: 100%; left: 0; z-index: 1000; display: none; text-align: left; max-height: 300px; overflow-y: auto;">
@@ -32,7 +27,7 @@
 
                     {{-- Botones de Acción --}}
                     <div>
-                        <button type="button" class="btn btn-outline-primary btn-lg mx-1 shadow-sm mb-2">
+                        <button type="button" id="btn-ver-consultas" class="btn btn-outline-primary btn-lg mx-1 shadow-sm mb-2">
                             <i class="fas fa-stethoscope mr-2"></i> Ver consultas
                         </button>
                         <button type="button" class="btn btn-success btn-lg mx-1 shadow-sm mb-2">
@@ -50,9 +45,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     const inputBuscador = document.getElementById('buscador-mascotas');
     const contenedorResultados = document.getElementById('resultados-busqueda');
+    const btnVerConsultas = document.getElementById('btn-ver-consultas');
+
+    let mascotaSeleccionadaId = null;
 
     inputBuscador.addEventListener('input', function() {
         let query = this.value.trim();
+        mascotaSeleccionadaId = null; // Limpiar selección si vuelve a escribir
         if (query.length < 2) {
             contenedorResultados.style.display = 'none';
             return;
@@ -66,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     data.forEach(mascota => {
                         let duenoNombre = mascota.dueno ? mascota.dueno.nombre_completo : 'Sin dueño';
                         let html = `
-                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" onclick="seleccionarMascota(${mascota.id}, '${mascota.nombre.replace(/'/g, "\\'")}', event)">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1 text-primary"><i class="fas fa-paw mr-2"></i>${mascota.nombre} (Folio: ${mascota.id})</h5>
                                     <small class="text-muted">${mascota.especie}</small>
@@ -85,6 +84,22 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 console.error('Error:', error);
             });
+    });
+
+    window.seleccionarMascota = function(id, nombre, event) {
+        event.preventDefault();
+        mascotaSeleccionadaId = id;
+        inputBuscador.value = nombre;
+        contenedorResultados.style.display = 'none';
+    };
+
+    btnVerConsultas.addEventListener('click', function() {
+        if (mascotaSeleccionadaId) {
+            window.location.href = `/expedientes/mascotas/${mascotaSeleccionadaId}/consultas`;
+        } else {
+            alert('Por favor, busca y selecciona un paciente de la lista primero.');
+            inputBuscador.focus();
+        }
     });
 
     // Ocultar al hacer clic fuera

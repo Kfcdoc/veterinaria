@@ -24,6 +24,11 @@ Route::middleware("auth")->group(function () {
         $resultados->load('dueno');
         return response()->json($resultados);
     })->name('expedientes.buscar');
+
+    Route::get('/expedientes/mascotas/{mascota}/consultas', function (\App\Models\Mascota $mascota) {
+        $mascota->load('dueno');
+        return view('modules.expedientes.consultas', compact('mascota'));
+    })->name('expedientes.consultas');
     
     // Rutas de Administrador
     Route::get('/admin/home', [AuthController::class, 'adminHome'])->name('admin.home');
