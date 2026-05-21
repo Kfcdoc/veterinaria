@@ -38,6 +38,34 @@ Route::middleware("auth")->group(function () {
         }
         return view('modules.expedientes.consulta_detalle', compact('mascota', 'consulta'));
     })->name('expedientes.consultas.detalle');
+
+    Route::get('/expedientes/mascotas/{mascota}/consultas/{consulta}/diagnostico', function (\App\Models\Mascota $mascota, \App\Models\Consulta $consulta) {
+        if ($consulta->mascota_id !== $mascota->id) {
+            abort(404);
+        }
+        return view('modules.expedientes.diagnostico', compact('mascota', 'consulta'));
+    })->name('expedientes.consultas.diagnostico');
+
+    Route::post('/expedientes/mascotas/{mascota}/consultas/{consulta}/diagnostico', function (\Illuminate\Http\Request $request, \App\Models\Mascota $mascota, \App\Models\Consulta $consulta) {
+        if ($consulta->mascota_id !== $mascota->id) {
+            abort(404);
+        }
+
+        $request->validate([
+            'diagnostico' => 'required|string'
+        ]);
+
+        $esNuevo = empty($consulta->diagnostico);
+        
+        $consulta->diagnostico = $request->diagnostico;
+        $consulta->save();
+
+        $mensaje = $esNuevo ? 'Se guardó la nueva información' : 'Se actualizó con éxito';
+
+        return back()->with('success', $mensaje);
+    })->name('expedientes.consultas.diagnostico.guardar');
+
+
     
     // Rutas de Administrador
     Route::get('/admin/home', [AuthController::class, 'adminHome'])->name('admin.home');

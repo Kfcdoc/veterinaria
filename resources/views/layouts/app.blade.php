@@ -18,6 +18,50 @@
     <link href="{{ asset('startbootstrap/css/sb-admin-2.min.css') }}" rel="stylesheet">
 
     @stack('styles')
+
+    <style>
+        /* Mejoras Visuales Premium Globales */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.08) !important;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 2rem 0 rgba(58, 59, 69, 0.15) !important;
+        }
+        .btn {
+            border-radius: 8px;
+            transition: all 0.2s ease-in-out;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 .25rem .5rem rgba(0,0,0,.15);
+        }
+        .list-group-item {
+            border-radius: 8px !important;
+            margin-bottom: 5px;
+            border: 1px solid rgba(0,0,0,.05);
+            transition: all 0.2s ease;
+        }
+        .list-group-item:hover {
+            background-color: #f8f9fc;
+            transform: scale(1.01);
+            z-index: 2;
+            box-shadow: 0 .15rem .5rem rgba(0,0,0,.05);
+        }
+        .input-group-lg > .form-control {
+            border-radius: 10px;
+            padding: 1.5rem 1rem;
+            font-size: 1.1rem;
+        }
+        .badge {
+            padding: 0.5em 0.75em;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+    </style>
 </head>
 
 <body id="page-top">

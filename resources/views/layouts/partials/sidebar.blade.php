@@ -22,8 +22,8 @@
     </div>
 
     {{-- Nav Item - Diagnóstico --}}
-    <li class="nav-item">
-        <a class="nav-link" href="#diagnostico">
+    <li class="nav-item {{ request()->routeIs('expedientes.consultas.diagnostico') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('expedientes.consultas.diagnostico', [$mascota->id ?? 0, $consulta->id ?? 0]) }}">
             <i class="fas fa-fw fa-stethoscope"></i>
             <span>Diagnóstico</span>
         </a>
