@@ -46,4 +46,24 @@ class Mascota extends Model
     {
         return $this->hasMany(Consulta::class);
     }
+
+    public function antecedentesAlergias()
+    {
+        return $this->hasMany(AntecedenteAlergia::class);
+    }
+
+    public function antecedentesLesiones()
+    {
+        return $this->hasMany(AntecedenteLesion::class);
+    }
+
+    public function antecedentesPatologicos()
+    {
+        return $this->hasMany(AntecedentePatologico::class);
+    }
+
+    public function historialAlimentacion()
+    {
+        return $this->hasMany(HistorialAlimentacion::class);
+    }
 }

@@ -66,6 +66,14 @@
         </div>
     </li>
 
+    {{-- Nav Item - Configuración --}}
+    <li class="nav-item {{ request()->routeIs('admin.configuracion*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('admin.configuracion') }}">
+            <i class="fas fa-fw fa-cogs"></i>
+            <span>Configuración</span>
+        </a>
+    </li>
+
     {{-- Divider --}}
     <hr class="sidebar-divider d-none d-md-block">
 

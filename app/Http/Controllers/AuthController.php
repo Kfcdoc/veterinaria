@@ -36,10 +36,36 @@ class AuthController extends Controller
     }
 
     public function home() {
-        return view('modules/dashboard/home');
+        $user = Auth::user();
+        $veterinario = clone $user->veterinario; // El veterinario actual
+        $veterinarioId = $veterinario ? $veterinario->id : null;
+
+        $stats = [
+            'total_mascotas' => \App\Models\Mascota::count(),
+            'consultas_hoy' => \App\Models\Consulta::whereDate('fecha_consulta', \Carbon\Carbon::today())->count(),
+            'mis_consultas' => $veterinarioId ? \App\Models\Consulta::where('veterinario_id', $veterinarioId)->count() : 0,
+        ];
+
+        $consultasRecientes = collect();
+        if ($veterinarioId) {
+            $consultasRecientes = \App\Models\Consulta::with('mascota')
+                ->where('veterinario_id', $veterinarioId)
+                ->orderBy('fecha_consulta', 'desc')
+                ->take(5)
+                ->get();
+        }
+
+        return view('modules/dashboard/home', compact('stats', 'consultasRecientes'));
     }
 
     public function adminHome() {
-        return view('modules/dashboard/admin_home');
+        $stats = [
+            'usuarios' => \App\Models\User::count(),
+            'mascotas' => \App\Models\Mascota::count(),
+            'consultas' => \App\Models\Consulta::count(),
+        ];
+        $config = \App\Models\ConfiguracionSistema::obtener();
+
+        return view('modules/dashboard/admin_home', compact('stats', 'config'));
     }
 }

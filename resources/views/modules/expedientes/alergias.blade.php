@@ -1,201 +1,103 @@
 @extends('layouts.app')
-
 @section('titulo_pagina', 'Alergias - Veterinaria')
-
 @section('contenido')
 
 @push('styles')
 <style>
-    /* === ALERGIAS: Temática de Alerta Crítica / Rojo-Coral === */
-    .alergia-hero {
-        background: linear-gradient(135deg, #7f0000 0%, #c62828 60%, #e53935 100%);
-        border-radius: 16px;
-        padding: 28px 32px;
-        color: white;
-        margin-bottom: 28px;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 8px 32px rgba(198, 40, 40, 0.4);
-    }
-    .alergia-hero::after {
-        content: '';
-        position: absolute;
-        top: -30px; right: -30px;
-        width: 160px; height: 160px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.06);
-    }
-    .alergia-hero::before {
-        content: '';
-        position: absolute;
-        bottom: -50px; right: 80px;
-        width: 200px; height: 200px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.04);
-    }
-    .alergia-hero h2 { font-size: 1.6rem; font-weight: 800; }
-    .alergia-hero .hero-tag {
-        display: inline-block;
-        background: rgba(255,255,255,0.2);
-        padding: 4px 14px; border-radius: 20px;
-        font-size: 0.78rem; font-weight: 700;
-        text-transform: uppercase; letter-spacing: 1px;
-        margin-bottom: 10px; backdrop-filter: blur(4px);
-    }
-    .alergia-hero .date-chip {
-        background: rgba(0,0,0,0.2); color: white;
-        padding: 6px 14px; border-radius: 20px;
-        font-size: 0.78rem; font-weight: 600;
-    }
-
-    /* Warning Banner */
-    .alergia-warning-banner {
-        background: linear-gradient(90deg, #ff5252, #ff1744);
-        border-radius: 12px;
-        padding: 16px 24px;
-        color: white;
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 24px;
-        box-shadow: 0 4px 16px rgba(255, 23, 68, 0.3);
-    }
-    .alergia-warning-banner .warn-icon {
-        font-size: 2.2rem;
-        flex-shrink: 0;
-        animation: pulse-warn 2s infinite;
-    }
-    @keyframes pulse-warn {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.6; }
-    }
-    .alergia-ok-banner {
-        background: linear-gradient(90deg, #e0f2f1, #f1f8e9);
-        border: 1.5px solid #80cbc4;
-        border-radius: 12px; padding: 16px 24px;
-        color: #00695c; display: flex; align-items: center; gap: 14px;
-        margin-bottom: 24px;
-    }
-    .card-alergia {
-        border: none; border-radius: 16px;
-        box-shadow: 0 4px 24px rgba(198, 40, 40, 0.1);
-        overflow: hidden;
-    }
-    .card-alergia .header-alergia {
-        background: #fff8f8;
-        border-bottom: 2px solid #ffcdd2;
-        padding: 18px 24px;
-        display: flex; align-items: center; gap: 14px;
-    }
-    .card-alergia .header-alergia .icon-circle {
-        width: 44px; height: 44px;
-        background: linear-gradient(135deg, #c62828, #e53935);
-        border-radius: 50%; display: flex; align-items: center;
-        justify-content: center; color: white; font-size: 1.2rem;
-    }
-    .btn-save-alergia {
-        background: linear-gradient(135deg, #7f0000, #c62828);
-        color: white; border: none;
-        padding: 14px 36px; border-radius: 50px;
-        font-size: 1rem; font-weight: 700; letter-spacing: 0.5px;
-        box-shadow: 0 6px 20px rgba(198, 40, 40, 0.4);
-        transition: all 0.3s ease;
-    }
-    .btn-save-alergia:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(198,40,40,0.5); color: white; }
-    .ck-editor__editable_inline { min-height: 260px; font-size: 1.05rem; }
-    .alert-success-custom {
-        background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
-        border: 1.5px solid #a5d6a7; border-radius: 12px;
-        color: #2e7d32; padding: 16px 20px; margin-bottom: 20px;
-    }
+    .alergia-hero { background: linear-gradient(135deg, #7f0000 0%, #c62828 60%, #e53935 100%); border-radius: 16px; padding: 28px 32px; color: white; margin-bottom: 28px; position: relative; overflow: hidden; box-shadow: 0 8px 32px rgba(198,40,40,0.4); }
+    .alergia-hero::after { content:''; position:absolute; top:-30px; right:-30px; width:160px; height:160px; border-radius:50%; background:rgba(255,255,255,0.06); }
+    .alergia-hero h2 { font-size:1.6rem; font-weight:800; }
+    .alergia-hero .chip { display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.2); color:white; padding:6px 14px; border-radius:20px; font-size:0.78rem; font-weight:600; }
+    .card-section { border:none; border-radius:16px; box-shadow:0 4px 24px rgba(198,40,40,0.1); overflow:hidden; margin-bottom:24px; }
+    .section-hdr { padding:16px 24px; display:flex; align-items:center; gap:12px; border-bottom:2px solid #ffcdd2; background:#fff8f8; }
+    .section-hdr .hico { width:40px; height:40px; background:linear-gradient(135deg,#c62828,#e53935); border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; font-size:1rem; }
+    .record-item { display:flex; align-items:center; justify-content:space-between; padding:14px 20px; border-bottom:1px solid #fce4ec; transition:background 0.15s; }
+    .record-item:last-child { border-bottom:none; }
+    .record-item:hover { background:#fff5f5; }
+    .record-item .info strong { color:#b71c1c; font-size:0.95rem; }
+    .record-item .info small { color:#90a4ae; font-size:0.8rem; }
+    .empty-state { padding:40px 20px; text-align:center; color:#bdbdbd; }
+    .empty-state i { font-size:3rem; margin-bottom:12px; }
+    .form-add { background:#fafafa; border-top:2px solid #ffcdd2; padding:20px 24px; }
+    .form-add .form-control-add { border:1.5px solid #ffcdd2; border-radius:10px; padding:10px 14px; }
+    .form-add .form-control-add:focus { border-color:#e53935; box-shadow:0 0 0 3px rgba(229,57,53,0.12); }
+    .btn-add-alergia { background:linear-gradient(135deg,#7f0000,#c62828); color:white; border:none; padding:10px 24px; border-radius:50px; font-weight:700; transition:all 0.3s; }
+    .btn-add-alergia:hover { transform:translateY(-2px); box-shadow:0 6px 16px rgba(198,40,40,0.4); color:white; }
+    .alert-ok { background:linear-gradient(135deg,#e8f5e9,#f1f8e9); border:1.5px solid #a5d6a7; border-radius:12px; color:#2e7d32; padding:14px 20px; display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+    .count-badge { background:#c62828; color:white; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:20px; }
 </style>
 @endpush
 
-    {{-- Hero Header --}}
-    <div class="alergia-hero">
-        <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 12px;">
-            <div>
-                <span class="hero-tag"><i class="fas fa-exclamation-triangle mr-1"></i> Registro Clínico</span>
-                <h2 class="mb-1">Alergias del Paciente</h2>
-                <p style="opacity:0.82; margin-bottom:0; font-size:0.92rem;">
-                    <i class="fas fa-paw mr-1"></i> <strong>{{ $mascota->nombre }}</strong> · {{ $mascota->especie }}
-                    @if($mascota->raza) · {{ $mascota->raza }} @endif
-                </p>
-            </div>
-            <div class="text-right">
-                <div class="date-chip mb-2"><i class="fas fa-calendar-alt mr-1"></i> {{ $consulta->fecha_consulta ? $consulta->fecha_consulta->format('d/m/Y') : 'Sin fecha' }}</div>
-            </div>
+<div class="alergia-hero">
+    <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap:12px;">
+        <div>
+            <div class="chip mb-2"><i class="fas fa-exclamation-triangle"></i> Antecedentes del Paciente</div>
+            <h2>Alergias del Paciente</h2>
+            <div style="opacity:0.82; font-size:0.92rem;"><i class="fas fa-paw mr-1"></i> <strong>{{ $mascota->nombre }}</strong> · {{ $mascota->especie }}@if($mascota->raza) · {{ $mascota->raza }}@endif</div>
         </div>
+        <div class="chip"><i class="fas fa-calendar-alt"></i> {{ $consulta->fecha_consulta ? $consulta->fecha_consulta->format('d/m/Y') : 'Sin fecha' }}</div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-end mb-3">
+    <a href="{{ route('expedientes.consultas.detalle', [$mascota->id, $consulta->id]) }}" class="btn btn-sm btn-outline-secondary" style="border-radius:50px; font-weight:600;"><i class="fas fa-arrow-left mr-1"></i> Volver a la Consulta</a>
+</div>
+
+@if(session('success'))
+    <div class="alert-ok"><i class="fas fa-check-circle fa-lg" style="color:#43a047;"></i><strong>{{ session('success') }}</strong></div>
+@endif
+
+<div class="card card-section">
+    <div class="section-hdr">
+        <div class="hico"><i class="fas fa-allergies"></i></div>
+        <div>
+            <h6 class="mb-0 font-weight-bold" style="color:#7f0000;">Alergias Registradas</h6>
+            <small class="text-muted">Sustancias alérgenas y reacciones documentadas</small>
+        </div>
+        @if($mascota->antecedentesAlergias->count())
+            <span class="count-badge ml-auto">{{ $mascota->antecedentesAlergias->count() }}</span>
+        @endif
     </div>
 
-    <div class="d-flex justify-content-end mb-3">
-        <a href="{{ route('expedientes.consultas.detalle', [$mascota->id, $consulta->id]) }}" class="btn btn-sm btn-outline-secondary" style="border-radius:50px; font-weight:600;">
-            <i class="fas fa-arrow-left mr-1"></i> Volver a la Consulta
-        </a>
-    </div>
-
-    @if(session('success'))
-        <div class="alert-success-custom d-flex align-items-center" style="gap:12px; display:flex !important;">
-            <i class="fas fa-check-circle fa-lg" style="color:#43a047;"></i>
-            <strong>{{ session('success') }}</strong>
-        </div>
-    @endif
-
-    {{-- Warning Banner --}}
-    @if($mascota->alergias)
-        <div class="alergia-warning-banner">
-            <div class="warn-icon"><i class="fas fa-radiation-alt"></i></div>
-            <div>
-                <strong style="font-size:1.05rem;">¡Atención! Alergias registradas</strong>
-                <div style="opacity:0.9; font-size:0.88rem; margin-top:2px;">Este paciente tiene alergias documentadas. Revisa el historial antes de recetar.</div>
+    @if($mascota->antecedentesAlergias->count())
+        @foreach($mascota->antecedentesAlergias as $alergia)
+            <div class="record-item">
+                <div class="info">
+                    <strong><i class="fas fa-radiation-alt mr-1"></i> {{ $alergia->sustancia_alergena }}</strong>
+                    @if($alergia->reaccion)
+                        <br><small><i class="fas fa-arrow-right mr-1"></i> Reacción: {{ $alergia->reaccion }}</small>
+                    @endif
+                </div>
+                <form action="{{ route('expedientes.alergias.eliminar', [$mascota->id, $alergia->id]) }}" method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar esta alergia?');">
+                    @csrf @method('DELETE')
+                    <button type="submit" class="btn btn-sm btn-outline-danger" style="border-radius:8px;"><i class="fas fa-trash-alt"></i></button>
+                </form>
             </div>
-        </div>
+        @endforeach
     @else
-        <div class="alergia-ok-banner">
-            <i class="fas fa-shield-alt fa-2x" style="color:#00897b; flex-shrink:0;"></i>
-            <div>
-                <strong>Sin alergias conocidas</strong>
-                <div style="font-size:0.88rem; margin-top:2px;">No hay registros previos. Documenta cualquier reacción adversa que se identifique.</div>
-            </div>
+        <div class="empty-state">
+            <i class="fas fa-shield-alt"></i>
+            <p class="mb-0 font-weight-bold">Sin alergias registradas</p>
+            <small>Agrega la primera alergia usando el formulario de abajo</small>
         </div>
     @endif
 
-    <div class="card card-alergia mb-4">
-        <div class="header-alergia">
-            <div class="icon-circle"><i class="fas fa-allergies"></i></div>
-            <div>
-                <h6 class="mb-0 font-weight-bold" style="color:#7f0000;">Registro de Alergias</h6>
-                <small class="text-muted">Medicamentos, alimentos, ambientales u otras reacciones adversas</small>
+    <div class="form-add">
+        <form action="{{ route('expedientes.consultas.alergias.guardar', [$mascota->id, $consulta->id]) }}" method="POST">
+            @csrf
+            <h6 class="font-weight-bold mb-3" style="color:#c62828; font-size:0.88rem;"><i class="fas fa-plus-circle mr-1"></i> Agregar Nueva Alergia</h6>
+            <div class="row">
+                <div class="col-md-5 mb-2">
+                    <input type="text" name="sustancia_alergena" class="form-control form-control-add" placeholder="Sustancia alérgena (ej: Penicilina)" required>
+                </div>
+                <div class="col-md-5 mb-2">
+                    <input type="text" name="reaccion" class="form-control form-control-add" placeholder="Reacción observada (ej: Hinchazón severa)">
+                </div>
+                <div class="col-md-2 mb-2">
+                    <button type="submit" class="btn btn-add-alergia w-100"><i class="fas fa-plus mr-1"></i> Agregar</button>
+                </div>
             </div>
-        </div>
-        <div class="card-body p-4">
-            <form action="{{ route('expedientes.consultas.alergias.guardar', [$mascota->id, $consulta->id]) }}" method="POST">
-                @csrf
-                <div class="form-group mb-4">
-                    <label for="alergias" class="font-weight-bold text-gray-800 mb-2">
-                        <i class="fas fa-list-ul mr-1" style="color:#c62828;"></i> Listado de Alergias:
-                    </label>
-                    <textarea class="form-control" id="alergias" name="alergias"
-                        placeholder="Ejemplo: Alergia a la penicilina (reacción cutánea severa), intolerancia a la lactosa...">{{ old('alergias', $mascota->alergias) }}</textarea>
-                    <small class="form-text text-muted mt-2">
-                        <i class="fas fa-info-circle mr-1"></i> Esta información queda en el expediente permanente de la mascota.
-                    </small>
-                </div>
-                <div class="text-right">
-                    <button type="submit" class="btn btn-save-alergia">
-                        <i class="fas fa-save mr-2"></i> Guardar Alergias
-                    </button>
-                </div>
-            </form>
-        </div>
+        </form>
     </div>
+</div>
 @endsection
-
-@push('scripts')
-<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
-<script>
-    ClassicEditor.create(document.querySelector('#alergias'), {
-        toolbar: ['heading', '|', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable', 'undo', 'redo']
-    }).catch(error => console.error(error));
-</script>
-@endpush

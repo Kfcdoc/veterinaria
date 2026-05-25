@@ -304,72 +304,88 @@
                 {{-- Alergias --}}
                 <div class="ant-item">
                     <div class="ant-label lbl-alergia">
-                        @if($mascota->alergias)
+                        @if($mascota->antecedentesAlergias->count())
                             <span class="has-badge" style="background:#e53935;"></span>
                         @endif
-                        <i class="fas fa-allergies"></i> Alergias
+                        <i class="fas fa-allergies"></i> Alergias ({{ $mascota->antecedentesAlergias->count() }})
                     </div>
-                    @if($mascota->alergias)
-                        <div class="ant-value ck-content">{!! $mascota->alergias !!}</div>
+                    @if($mascota->antecedentesAlergias->count())
+                        <div class="ant-value">
+                            @foreach($mascota->antecedentesAlergias as $a)
+                                <div style="margin-bottom:4px;"><i class="fas fa-circle mr-1" style="font-size:0.4rem; vertical-align:middle; color:#e53935;"></i> <strong>{{ $a->sustancia_alergena }}</strong>@if($a->reaccion) — <em>{{ $a->reaccion }}</em>@endif</div>
+                            @endforeach
+                        </div>
                     @else
                         <div class="ant-value empty">Sin alergias registradas.</div>
                     @endif
                     <a href="{{ route('expedientes.consultas.alergias', [$mascota->id, $consulta->id]) }}" class="ant-edit-link link-alergia">
-                        <i class="fas fa-edit mr-1"></i> {{ $mascota->alergias ? 'Actualizar' : 'Registrar' }}
+                        <i class="fas fa-edit mr-1"></i> Gestionar
                     </a>
                 </div>
 
                 {{-- Lesiones --}}
                 <div class="ant-item">
                     <div class="ant-label lbl-lesion">
-                        @if($mascota->lesiones)
+                        @if($mascota->antecedentesLesiones->count())
                             <span class="has-badge" style="background:#fb8c00;"></span>
                         @endif
-                        <i class="fas fa-bone"></i> Lesiones Previas
+                        <i class="fas fa-bone"></i> Lesiones ({{ $mascota->antecedentesLesiones->count() }})
                     </div>
-                    @if($mascota->lesiones)
-                        <div class="ant-value ck-content">{!! $mascota->lesiones !!}</div>
+                    @if($mascota->antecedentesLesiones->count())
+                        <div class="ant-value">
+                            @foreach($mascota->antecedentesLesiones as $l)
+                                <div style="margin-bottom:4px;"><i class="fas fa-circle mr-1" style="font-size:0.4rem; vertical-align:middle; color:#fb8c00;"></i> {{ $l->tipo_lesion }}</div>
+                            @endforeach
+                        </div>
                     @else
-                        <div class="ant-value empty">Sin lesiones previas registradas.</div>
+                        <div class="ant-value empty">Sin lesiones previas.</div>
                     @endif
                     <a href="{{ route('expedientes.consultas.lesiones', [$mascota->id, $consulta->id]) }}" class="ant-edit-link link-lesion">
-                        <i class="fas fa-edit mr-1"></i> {{ $mascota->lesiones ? 'Actualizar' : 'Registrar' }}
+                        <i class="fas fa-edit mr-1"></i> Gestionar
                     </a>
                 </div>
 
                 {{-- Patológicos --}}
                 <div class="ant-item">
                     <div class="ant-label lbl-pato">
-                        @if($mascota->patologicos)
+                        @if($mascota->antecedentesPatologicos->count())
                             <span class="has-badge" style="background:#00897b;"></span>
                         @endif
-                        <i class="fas fa-file-medical-alt"></i> Antec. Patológicos
+                        <i class="fas fa-file-medical-alt"></i> Patológicos ({{ $mascota->antecedentesPatologicos->count() }})
                     </div>
-                    @if($mascota->patologicos)
-                        <div class="ant-value ck-content">{!! $mascota->patologicos !!}</div>
+                    @if($mascota->antecedentesPatologicos->count())
+                        <div class="ant-value">
+                            @foreach($mascota->antecedentesPatologicos as $p)
+                                <div style="margin-bottom:4px;"><i class="fas fa-circle mr-1" style="font-size:0.4rem; vertical-align:middle; color:#00897b;"></i> {{ $p->enfermedad }} @if($p->es_cronica)<span style="color:#c62828; font-size:0.75rem; font-weight:700;">(Crónica)</span>@endif</div>
+                            @endforeach
+                        </div>
                     @else
                         <div class="ant-value empty">Sin antecedentes patológicos.</div>
                     @endif
                     <a href="{{ route('expedientes.consultas.patologicos', [$mascota->id, $consulta->id]) }}" class="ant-edit-link link-pato">
-                        <i class="fas fa-edit mr-1"></i> {{ $mascota->patologicos ? 'Actualizar' : 'Registrar' }}
+                        <i class="fas fa-edit mr-1"></i> Gestionar
                     </a>
                 </div>
 
                 {{-- Alimentación --}}
                 <div class="ant-item">
                     <div class="ant-label lbl-alim">
-                        @if($mascota->alimentacion)
+                        @if($mascota->historialAlimentacion->count())
                             <span class="has-badge" style="background:#43a047;"></span>
                         @endif
-                        <i class="fas fa-utensils"></i> Dieta / Alimentación
+                        <i class="fas fa-utensils"></i> Alimentación ({{ $mascota->historialAlimentacion->count() }})
                     </div>
-                    @if($mascota->alimentacion)
-                        <div class="ant-value ck-content">{!! $mascota->alimentacion !!}</div>
+                    @if($mascota->historialAlimentacion->count())
+                        <div class="ant-value">
+                            @foreach($mascota->historialAlimentacion as $al)
+                                <div style="margin-bottom:4px;"><i class="fas fa-circle mr-1" style="font-size:0.4rem; vertical-align:middle; color:#43a047;"></i> {{ $al->descripcion_dieta }} <small class="text-muted">({{ $al->frecuencia_diaria }}x/día)</small></div>
+                            @endforeach
+                        </div>
                     @else
                         <div class="ant-value empty">Sin información de dieta.</div>
                     @endif
                     <a href="{{ route('expedientes.consultas.alimentacion', [$mascota->id, $consulta->id]) }}" class="ant-edit-link link-alim">
-                        <i class="fas fa-edit mr-1"></i> {{ $mascota->alimentacion ? 'Actualizar' : 'Registrar' }}
+                        <i class="fas fa-edit mr-1"></i> Gestionar
                     </a>
                 </div>
 

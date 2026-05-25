@@ -31,7 +31,7 @@ Route::middleware("auth")->group(function () {
     })->name('expedientes.consultas');
 
     Route::get('/expedientes/mascotas/{mascota}/consultas/{consulta}', function (\App\Models\Mascota $mascota, \App\Models\Consulta $consulta) {
-        $mascota->load('dueno');
+        $mascota->load(['dueno', 'antecedentesAlergias', 'antecedentesLesiones', 'antecedentesPatologicos', 'historialAlimentacion']);
         $consulta->load('veterinario');
         if ($consulta->mascota_id !== $mascota->id) {
             abort(404);
@@ -83,61 +83,72 @@ Route::middleware("auth")->group(function () {
     // Alergias
     Route::get('/expedientes/mascotas/{mascota}/consultas/{consulta}/alergias', function (\App\Models\Mascota $mascota, \App\Models\Consulta $consulta) {
         if ($consulta->mascota_id !== $mascota->id) abort(404);
+        $mascota->load('antecedentesAlergias');
         return view('modules.expedientes.alergias', compact('mascota', 'consulta'));
     })->name('expedientes.consultas.alergias');
 
     Route::post('/expedientes/mascotas/{mascota}/consultas/{consulta}/alergias', function (\Illuminate\Http\Request $request, \App\Models\Mascota $mascota, \App\Models\Consulta $consulta) {
         if ($consulta->mascota_id !== $mascota->id) abort(404);
-        $request->validate(['alergias' => 'required|string']);
-        $esNuevo = empty($mascota->alergias);
-        $mascota->alergias = $request->alergias;
-        $mascota->save();
-        return back()->with('success', $esNuevo ? 'Alergias registradas' : 'Alergias actualizadas con éxito');
+        $request->validate(['sustancia_alergena' => 'required|string|max:255']);
+        \App\Models\AntecedenteAlergia::create([
+            'mascota_id' => $mascota->id,
+            'sustancia_alergena' => $request->sustancia_alergena,
+            'reaccion' => $request->reaccion,
+        ]);
+        return back()->with('success', 'Alergia registrada exitosamente.');
     })->name('expedientes.consultas.alergias.guardar');
 
     // Lesiones
     Route::get('/expedientes/mascotas/{mascota}/consultas/{consulta}/lesiones', function (\App\Models\Mascota $mascota, \App\Models\Consulta $consulta) {
         if ($consulta->mascota_id !== $mascota->id) abort(404);
+        $mascota->load('antecedentesLesiones');
         return view('modules.expedientes.lesiones', compact('mascota', 'consulta'));
     })->name('expedientes.consultas.lesiones');
 
     Route::post('/expedientes/mascotas/{mascota}/consultas/{consulta}/lesiones', function (\Illuminate\Http\Request $request, \App\Models\Mascota $mascota, \App\Models\Consulta $consulta) {
         if ($consulta->mascota_id !== $mascota->id) abort(404);
-        $request->validate(['lesiones' => 'required|string']);
-        $esNuevo = empty($mascota->lesiones);
-        $mascota->lesiones = $request->lesiones;
-        $mascota->save();
-        return back()->with('success', $esNuevo ? 'Lesiones registradas' : 'Lesiones actualizadas con éxito');
+        $request->validate(['tipo_lesion' => 'required|string|max:255']);
+        \App\Models\AntecedenteLesion::create([
+            'mascota_id' => $mascota->id,
+            'tipo_lesion' => $request->tipo_lesion,
+        ]);
+        return back()->with('success', 'Lesión registrada exitosamente.');
     })->name('expedientes.consultas.lesiones.guardar');
 
     // Patológicos
     Route::get('/expedientes/mascotas/{mascota}/consultas/{consulta}/patologicos', function (\App\Models\Mascota $mascota, \App\Models\Consulta $consulta) {
         if ($consulta->mascota_id !== $mascota->id) abort(404);
+        $mascota->load('antecedentesPatologicos');
         return view('modules.expedientes.patologicos', compact('mascota', 'consulta'));
     })->name('expedientes.consultas.patologicos');
 
     Route::post('/expedientes/mascotas/{mascota}/consultas/{consulta}/patologicos', function (\Illuminate\Http\Request $request, \App\Models\Mascota $mascota, \App\Models\Consulta $consulta) {
         if ($consulta->mascota_id !== $mascota->id) abort(404);
-        $request->validate(['patologicos' => 'required|string']);
-        $esNuevo = empty($mascota->patologicos);
-        $mascota->patologicos = $request->patologicos;
-        $mascota->save();
-        return back()->with('success', $esNuevo ? 'Antecedentes patológicos registrados' : 'Antecedentes patológicos actualizados con éxito');
+        $request->validate(['enfermedad' => 'required|string|max:255']);
+        \App\Models\AntecedentePatologico::create([
+            'mascota_id' => $mascota->id,
+            'enfermedad' => $request->enfermedad,
+            'es_cronica' => $request->has('es_cronica'),
+        ]);
+        return back()->with('success', 'Antecedente patológico registrado.');
     })->name('expedientes.consultas.patologicos.guardar');
 
     // Alimentación
     Route::get('/expedientes/mascotas/{mascota}/consultas/{consulta}/alimentacion', function (\App\Models\Mascota $mascota, \App\Models\Consulta $consulta) {
         if ($consulta->mascota_id !== $mascota->id) abort(404);
+        $mascota->load('historialAlimentacion');
         return view('modules.expedientes.alimentacion', compact('mascota', 'consulta'));
     })->name('expedientes.consultas.alimentacion');
 
     Route::post('/expedientes/mascotas/{mascota}/consultas/{consulta}/alimentacion', function (\Illuminate\Http\Request $request, \App\Models\Mascota $mascota, \App\Models\Consulta $consulta) {
         if ($consulta->mascota_id !== $mascota->id) abort(404);
-        $request->validate(['alimentacion' => 'required|string']);
-        $esNuevo = empty($mascota->alimentacion);
-        $mascota->alimentacion = $request->alimentacion;
-        $mascota->save();
-        return back()->with('success', $esNuevo ? 'Dieta/Alimentación registrada' : 'Dieta/Alimentación actualizada con éxito');
+        $request->validate(['descripcion_dieta' => 'required|string']);
+        \App\Models\HistorialAlimentacion::create([
+            'mascota_id' => $mascota->id,
+            'descripcion_dieta' => $request->descripcion_dieta,
+            'frecuencia_diaria' => $request->frecuencia_diaria ?? 2,
+        ]);
+        return back()->with('success', 'Registro de alimentación guardado.');
     })->name('expedientes.consultas.alimentacion.guardar');
     
     // Rutas de Administrador
@@ -150,6 +161,67 @@ Route::middleware("auth")->group(function () {
     Route::put('/admin/usuarios/{user}', [UserController::class, 'update'])->name('admin.usuarios.update');
     Route::get('/admin/usuarios/{user}/eliminar', [UserController::class, 'show'])->name('admin.usuarios.show');
     Route::delete('/admin/usuarios/{user}', [UserController::class, 'destroy'])->name('admin.usuarios.destroy');
-    
+
+    // Configuración del Sistema
+    Route::get('/admin/configuracion', function () {
+        $config = \App\Models\ConfiguracionSistema::obtener();
+        return view('modules.admin.configuracion', compact('config'));
+    })->name('admin.configuracion');
+
+    Route::post('/admin/configuracion', function (\Illuminate\Http\Request $request) {
+        $config = \App\Models\ConfiguracionSistema::obtener();
+        $config->fill($request->only([
+            'nombre_clinica', 'mision', 'vision', 'valores', 'historia',
+            'direccion_fisica', 'telefono_contacto'
+        ]));
+
+        // Precios como JSON
+        if ($request->has('servicios_nombre')) {
+            $servicios = [];
+            $nombres = $request->input('servicios_nombre', []);
+            $precios = $request->input('servicios_precio', []);
+            foreach ($nombres as $i => $nombre) {
+                if (!empty($nombre)) {
+                    $servicios[] = ['nombre' => $nombre, 'precio' => $precios[$i] ?? 0];
+                }
+            }
+            $config->precios_servicios = $servicios;
+        }
+
+        // Logo
+        if ($request->hasFile('logo')) {
+            $path = $request->file('logo')->store('logos', 'public');
+            $config->logo_path = $path;
+        }
+
+        $config->save();
+        return back()->with('success', 'Configuración actualizada correctamente.');
+    })->name('admin.configuracion.guardar');
+
+    // Antecedentes CRUD (eliminar registros individuales)
+    Route::delete('/expedientes/mascotas/{mascota}/alergias/{alergia}', function (\App\Models\Mascota $mascota, \App\Models\AntecedenteAlergia $alergia) {
+        if ($alergia->mascota_id !== $mascota->id) abort(404);
+        $alergia->delete();
+        return back()->with('success', 'Alergia eliminada.');
+    })->name('expedientes.alergias.eliminar');
+
+    Route::delete('/expedientes/mascotas/{mascota}/lesiones/{lesion}', function (\App\Models\Mascota $mascota, \App\Models\AntecedenteLesion $lesion) {
+        if ($lesion->mascota_id !== $mascota->id) abort(404);
+        $lesion->delete();
+        return back()->with('success', 'Lesión eliminada.');
+    })->name('expedientes.lesiones.eliminar');
+
+    Route::delete('/expedientes/mascotas/{mascota}/patologicos/{patologico}', function (\App\Models\Mascota $mascota, \App\Models\AntecedentePatologico $patologico) {
+        if ($patologico->mascota_id !== $mascota->id) abort(404);
+        $patologico->delete();
+        return back()->with('success', 'Antecedente eliminado.');
+    })->name('expedientes.patologicos.eliminar');
+
+    Route::delete('/expedientes/mascotas/{mascota}/alimentacion/{alimentacion}', function (\App\Models\Mascota $mascota, \App\Models\HistorialAlimentacion $alimentacion) {
+        if ($alimentacion->mascota_id !== $mascota->id) abort(404);
+        $alimentacion->delete();
+        return back()->with('success', 'Registro de alimentación eliminado.');
+    })->name('expedientes.alimentacion.eliminar');
+
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
